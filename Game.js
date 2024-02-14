@@ -6,6 +6,7 @@ class Game {
     static gameObjects = [];
     static prevTime = 0;
     static deltaTime = 0;
+    static fpscounter = document.getElementsByClassName("fps")[0];
 
     static renderInit() {
         for (let i = 0; i < 25; i++) {
@@ -52,7 +53,7 @@ class Game {
 
         // Handle input (replace with your key handling logic)
         // ... (code from previous examples)
-        
+
 
 
         // Render all game objects (replace with your rendering logic)
@@ -68,8 +69,9 @@ class Game {
         //console.log((1000 / 15) * Game.deltaTime);
         console.log(Game.gameObjects[0].x);
         console.log(Game.gameObjects[0].y);
-        //requestAnimationFrame(Game.gameLoop);
-        setTimeout(Game.gameLoop, (1000 / 60) * Game.deltaTime); 
+        requestAnimationFrame(Game.gameLoop);
+        Game.fpscounter.innerHTML = `FPS: ${Math.floor( 1 / (Game.deltaTime/ 1000))}`;
+        //setTimeout(Game.gameLoop, (1000 / 60) * Game.deltaTime);
     }
 
     static gameStart() {
@@ -81,30 +83,30 @@ class Game {
         let width = 100; // Adjust width and height as needed
         let height = 100;
         let noiseMap = new Array(width * height).fill(0);
-        
+
         for (let y = 0; y < height; y++) {
-          for (let x = 0; x < width; x++) {
-            noiseMap[y * width + x] = Math.random();
-          }
+            for (let x = 0; x < width; x++) {
+                noiseMap[y * width + x] = Math.random();
+            }
         }
 
         let wallThreshold = 0.68; // Adjust threshold for desired wall density
 
-for (let y = 0; y < 25; y++) {
-  for (let x = 0; x < 80; x++) {
-    let noiseValue = noiseMap[y * width + x];
-    if (noiseValue > wallThreshold) {
-      let wall = new Wall(x * 1, y * 1, `<span style='color: rgb(${(0.5-noiseValue)*-255},${(0.5-noiseValue)*-255},${(0.5-noiseValue)*-255})'>■</span>`, true); // Cre■ ■  ■■ate a wall object
-      Game.gameObjects.push(wall); // Add to your game objects array
-    } else {
-      // Create floor or other terrain elements as needed
-    }
-  }
-}
+        for (let y = 0; y < 25; y++) {
+            for (let x = 0; x < 80; x++) {
+                let noiseValue = noiseMap[y * width + x];
+                if (noiseValue > wallThreshold) {
+                    let wall = new Wall(x * 1, y * 1, `<span style='color: rgb(${(0.5 - noiseValue) * -255},${(0.5 - noiseValue) * -255},${(0.5 - noiseValue) * -255})'>■</span>`, true); // Cre■ ■  ■■ate a wall object
+                    Game.gameObjects.push(wall); // Add to your game objects array
+                } else {
+                    // Create floor or other terrain elements as needed
+                }
+            }
+        }
 
 
 
-        
+
         document.addEventListener("keydown", (event) => {
             if (event.key === "w") {
                 //move player left
@@ -126,6 +128,6 @@ for (let y = 0; y < 25; y++) {
         Game.gameLoop();
     }
 
-    
+
 
 }
